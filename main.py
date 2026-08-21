@@ -2,6 +2,7 @@ import pandas as pd
 
 from src.data.entsoe_client import ENTSOEDataClient
 from src.config import PRICE_DIR, LOAD_DIR
+from src.config import GENERATION_DIR
 
 
 def main():
@@ -79,10 +80,10 @@ def main():
 
 
     load_forecast = client.get_load_forecast(
-    zone,
-    start_date,
-    end_date
-)
+        zone,
+        start_date,
+        end_date
+    )
 
     output_file = (
         LOAD_DIR /
@@ -96,6 +97,26 @@ def main():
 
     print(load_forecast.head())
     print(f"Saved: {output_file}")
+
+
+    generation = client.get_generation(
+        zone,
+        start_date,
+        end_date
+    )
+
+    output_file = (
+        GENERATION_DIR /
+        f"{zone}_generation.csv"
+    )
+
+    generation.to_csv(
+        output_file,
+        index=False
+    )
+
+    print(generation.head())
+
 
 
 if __name__ == "__main__":
